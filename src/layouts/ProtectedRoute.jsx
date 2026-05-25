@@ -5,7 +5,7 @@ function ProtectedRoute({ children }) {
 
     // Записываем, откуда пришел пользователья
     const location = useLocation();  
-    const currentUser = useAuth();
+    const { currentUser } = useAuth();
 
     // ЕСЛИ ПОЛЬЗОВАТЕЛЬ НЕ АВТОРИЗОАН
     if (!currentUser) {
