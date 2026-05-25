@@ -27,6 +27,7 @@ export function AuthProvider( {children} ) {
         
         // Добавляем нового пользователя в список пользователей
         users.push(newUser);
+        console.log(users);
         // Перезаписываем список пользователей
         localStorage.setItem('users', JSON.stringify(users));
         return {success: true, message: 'Регистрация успешна'};
