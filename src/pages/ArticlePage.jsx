@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 function ArticlePage() {
@@ -5,6 +6,15 @@ function ArticlePage() {
     const { articleId } = useParams();
     // navigate возвращает функцию, которой можно программно менять URL
     const navigate = useNavigate();
+    const [article, setArticle] = useState(null);
+
+
+    useEffect(() => {
+        const savedArticles = JSON.parse(localStorage.getItem('blog_articles') || '[]');
+        const foundArticle = savedArticles.find(a => a.id === articleId);
+        setArticle(foundArticle)
+    }, [articleId]);
+
     // Возвращает на 1 страницу назад (аналог кнопки "Назад")
     const handleGoBack = () => {
         navigate(-1);
@@ -14,12 +24,27 @@ function ArticlePage() {
         navigate('/news')
     };
 
+
+    if (!article) {
+        return (
+            <>
+                <h2>Статья не найдена</h2>
+                <button onClick={handleGoBack}>
+                    На главную ленту
+                </button>
+            </>
+        );
+    } 
+
     return (
         <>
             <button onClick={handleGoBack}>⬅Назад в ленту</button>
             <div>
-                <h1>Вы читаете сатаью {artickleId}</h1>
-                <p>Здесь полноценный текст статьи</p>
+                <h1>{article.title}</h1>
+                <span>Категория: {article.category}</span>
+                <span>Автор: {article.authorName}</span>
+                <hr />
+                <p>{article.description}</p>
             </div>
             <button onClick={handleGoHome}>⏹На главную ленту</button>
         </>

@@ -11,6 +11,8 @@ import Settings from './pages/Settings';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ArticleForm from './pages/ArticleEdit';
+
 import ProtectedRoute from './layouts/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 
@@ -40,6 +42,10 @@ createRoot(document.getElementById('root')).render(
             <Route path='profile' element={<Profile />} />
             {/* .../dashboard/settings */}
             <Route path='settings' element={<Settings />} />
+            {/* .../dashboard/create-article */}
+            <Route path='create-article' element={<ArticleForm />} />
+            {/* .../dashboard/edit-article/:articleId */}
+            <Route path='edit-article/:articleId' element={<ArticleForm />} />
           </Route>
         </Route>
         <Route path='*' element={<NotFound />} />
