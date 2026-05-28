@@ -4,28 +4,28 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 // https:localhost/news?search=react&category=frontend
-const ARTICLE_DATA = [
+const ARTICLES_DATA = [
     {
         id: 'future-of-js', 
         title: 'Статья 1', 
+        category: 'javascript',
         description: 'Описание статьи 1',
         authorId: 'system',
-        authorName: 'Редакция',
-        category: 'javascript'
+        authorName: 'Редакция'
     }, {
         id: 'css-modules', 
         title: 'Статья 2', 
+        category: 'css',
         description: 'Описание статьи 2',
         authorId: 'system',
-        authorName: 'Редакция',
-        category: 'css'
+        authorName: 'Редакция'
     }, {
         id: 'react-router-v6', 
         title: 'Статья 3', 
+        category: 'react',
         description: 'Описание статьи 3',
         authorId: 'system',
-        authorName: 'Редакция',
-        category: 'react'
+        authorName: 'Редакция'
     }
 ];
 
@@ -38,7 +38,7 @@ function NewsFeed() {
         if (savedArticles) {
             setArticles(JSON.parse(savedArticles));
         } else {
-            localStorage.setItem('blog_articles', JSON.stringify(ARTICLE_DATA));
+            localStorage.setItem('blog_articles', JSON.stringify(ARTICLES_DATA));
         };
     }, []);
     
@@ -121,7 +121,7 @@ function NewsFeed() {
                         onInput={hendleSearchChange}
                     />
                 </div>
-                {/* ВЫПАДАЮЩИЙ СПИСОК КАТЕГОРИИ */}
+                {/* ВЫПАДАЮЩИЙ СПИСОК КАТЕГОРИЙ */}
                 <div>
                     <label htmlFor="category-select">Категории</label>
                     <select
@@ -144,17 +144,17 @@ function NewsFeed() {
             </div>
             <div>
                 { filteredArticles.length > 0 ? (
-                    filteredArticles.map((article) => (
-                        <article key={article.id}>
-                            <span>{article.authorName}</span>
-                            <h2>{article.title}</h2>
-                            <h2>{article.description}</h2>
-                            <span>{article.category}</span>
-                            <Link to={`/news/${article.id}`}>
+                    filteredArticles.map((a) => (
+                        <article key={a.id}>
+                            <span>{a.authorName}</span>
+                            <h2>{a.title}</h2>
+                            <h2>{a.description}</h2>
+                            <span>{a.category.toUpperCase()}</span>
+                            <Link to={`/news/${a.id}`}>
                                 Читать полностью
                             </Link>
-                            { currentUser && currentUser.id === article.authorId && (
-                                <Link to={`/dashboard/edit-article/${article.id}`}>
+                            { currentUser && currentUser.id === a.authorId && (
+                                <Link to={`/dashboard/edit-article/${a.id}`}>
                                     Редактировать
                                 </Link>
                             )}
@@ -164,7 +164,7 @@ function NewsFeed() {
                     <p>По вашему запросу ничего не найдено</p>
                 )}
                 {/* 
-                    {ARTICLE_DATA.map((article) => (
+                    {ARTICLES_DATA.map((article) => (
                     <article key={article.id}>
                         <h2>{article.title}</h2>
                         <h2>{article.description}</h2>

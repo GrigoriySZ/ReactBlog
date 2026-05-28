@@ -19,7 +19,7 @@ function ArticleForm() {
         if (isEditMode) {
             const articles = JSON.parse(localStorage.getItem('blog_articles') || '[]');
             const articleEdit = articles.find(a => a.id === articleId);
-            if (articleEdit) {
+            if (!articleEdit) {
                 setError('Статья не найдена');
                 return;
             };
@@ -43,7 +43,7 @@ function ArticleForm() {
             setError('Пожалуйста, заполните все поля');
             return;
         }
-        const articles = JSON.parse(localStorage.getItem('blog_articles'));
+        const articles = JSON.parse(localStorage.getItem('blog_articles') || '[]');
         if (isEditMode) {
             const updateArticle = articles.map(a => {
                 if (a.id === articleId) {
@@ -54,11 +54,9 @@ function ArticleForm() {
                         description
                     };
                 }
-                return a
+                return a;
             });
-            localStorage.setItem('blog_articles',
-                JSON.stringify(updateArticle)
-            );
+            localStorage.setItem('blog_articles', JSON.stringify(updateArticle));
         } else {
             const newArticle = {
                 id: Date.now().toString(),

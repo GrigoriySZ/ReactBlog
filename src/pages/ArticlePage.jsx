@@ -29,7 +29,7 @@ function ArticlePage() {
         return (
             <>
                 <h2>Статья не найдена</h2>
-                <button onClick={handleGoBack}>
+                <button onClick={handleGoHome}>
                     На главную ленту
                 </button>
             </>
@@ -38,7 +38,7 @@ function ArticlePage() {
 
     return (
         <>
-            <button onClick={handleGoBack}>⬅Назад в ленту</button>
+            <button onClick={handleGoBack}>⬅ Назад в ленту</button>
             <div>
                 <h1>{article.title}</h1>
                 <span>Категория: {article.category}</span>
@@ -46,7 +46,7 @@ function ArticlePage() {
                 <hr />
                 <p>{article.description}</p>
             </div>
-            <button onClick={handleGoHome}>⏹На главную ленту</button>
+            <button onClick={handleGoHome}>⏹ На главную ленту</button>
         </>
     );
 };
