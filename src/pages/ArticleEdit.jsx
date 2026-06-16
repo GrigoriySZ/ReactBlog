@@ -72,6 +72,42 @@ function ArticleForm() {
         navigate('/news');
     };
 
+    const handleDelete = () => {
+        setError('');
+        // Проверяем на факт редактирования статьи
+        if (!isEditMode) return;
+
+        const articles = JSON.parse(localStorage.getItem('blog_articles') || '[]');
+        const articleDelete = articles.find(a => a.id === articleId);
+
+        if (!articleDelete) {
+            setError('Статья не найдена');
+            navigate('/news');
+            return;
+        };
+
+        // ЖЕСТКАЯ ПРОВЕРКА: именно автор пытается редактировать
+        if (articleDelete.authorId !== currentUser.id) {
+            alert('ВЫ МОЖЕТЕ РЕДАКТИРОВАТЬ ТОЛЬКО СВОИ СТАТЬИ');
+            navigate('/news');
+            return;
+        }
+
+        if (confirm(`Вы действительно хотите удалить статью "${articleDelete.title}"`)) {
+            // Отсортировываем список статей без удаленной
+            const newArticlesList = articles.filter((article) => article.id !== articleDelete.id);
+
+            // Передаем новый набор статей в localStorage
+            localStorage.setItem('blog_articles', JSON.stringify(newArticlesList));
+            alert(`Статья "${articleDelete.title}" успешно удалена`);
+            navigate('/news');
+            return;
+        }
+
+        // Сообщение в случае отмены или перезагрузки статьи
+        alert('Удаление статьи отменено');
+    };
+
     return(
         <div>
             <h2>
@@ -99,6 +135,12 @@ function ArticleForm() {
                     placeholder="Введите текст статьи"
                 />
                 <button type="submit">Сохранить</button>
+                <button 
+                    type="button"
+                    onClick={handleDelete}
+                >
+                    Удалить
+                </button>
                 <button
                     type="button"
                     onClick={() =>

@@ -32,6 +32,8 @@ const ARTICLES_DATA = [
 function NewsFeed() {
     const { currentUser } = useAuth();
     const [articles, setArticles] = useState([]);
+
+    // const isEditMode = Boolean(articl)
     
     useEffect(() => {
         const savedArticles = localStorage.getItem('blog_articles');
@@ -93,7 +95,37 @@ function NewsFeed() {
         // Сбрасываем фильтры URL
         // Передаем пустой объект, URL становится /news
         setSearchParams({});
-    }
+    };
+
+    const handleDelete = (currentArticle) => {
+        // Ищем и проверяме наличие статьи
+        const articleDelete = articles.find(a => a.id === currentArticle.id);
+        if (!articleDelete) {
+            alert('Статья не найдена');
+            return;
+        };
+
+        // На случай удаления другим пользователем
+        if (currentUser.id !== articleDelete.authorId) {
+            alert('ВЫ МОЖЕТЕ УДАЛЯТЬ ТОЛЬКО СВОИ СТАТЬИ');
+            return;
+        };
+
+        // Запрашиваем подтверждение на удаление
+        if (confirm(`Вы действительно хотите удалить статью "${articleDelete.title}"`)) {
+            // Отсортировываем список статей без удаленной
+            const newArticlesList = articles.filter((article) => article.id !== articleDelete.id);
+
+            // Передаем новый набор статей в state и загружаем их в localStorage
+            setArticles(newArticlesList);
+            localStorage.setItem('blog_articles', JSON.stringify(newArticlesList));
+            alert(`Статья "${articleDelete.title}" успешно удалена`);
+            return;
+        }
+
+        // Сообщение в случае отмены или перезагрузки статьи
+        alert('Удаление статьи отменено')
+    };
 
     return (
         <>
@@ -157,6 +189,11 @@ function NewsFeed() {
                                 <Link to={`/dashboard/edit-article/${a.id}`}>
                                     Редактировать
                                 </Link>
+                            )}
+                            { currentUser && currentUser.id === a.authorId && (
+                                <button onClick={() => handleDelete(a)}>
+                                    Удалить
+                                </button>
                             )}
                         </article>
                     ))
